@@ -2,7 +2,12 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 
-Vue.config.productionTip = true
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+
+// 安装 ElementUI
+Vue.use(ElementUI);
+Vue.config.productionTip = false
 
 new Vue({
   router,
