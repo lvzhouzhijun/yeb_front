@@ -1,6 +1,7 @@
 import axios from 'axios'
 import {Message} from 'element-ui'
 import router from '../router'
+
 // 响应拦截器
 // success：表示成功调到后端接口
 // error：调用后端接口失败
@@ -16,7 +17,7 @@ axios.interceptors.response.use(success => {
     }
   }
   return success.data;
-},error => {
+},error => { // error 压根就没有访问到后端接口
   if(error.response.code === 504 || error.response.code === 404){
     Message.error({message:'服务器被吃掉了'})
   } else if (error.response.code === 403){
@@ -34,3 +35,15 @@ axios.interceptors.response.use(success => {
   }
   return
 })
+
+// 前置路径，默认 空，就是没有
+let base = ''
+
+// 传送JSON格式的POST请求
+export const postRequest = (url,params) => {
+  return axios({
+    method: 'post',
+    url: `${base}${url}`,
+    data: params
+  })
+}

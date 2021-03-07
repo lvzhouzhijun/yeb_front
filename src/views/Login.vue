@@ -11,7 +11,7 @@
       <el-form-item prop="code">
         <el-input type="text" auto-complete="false" v-model="loginForm.code"
                   placeholder="点击图片更换验证码" style="width: 250px;margin-right: 5px" />
-       <img :src="captchaUrl">
+       <img :src="captchaUrl" @click="updateCaptcha">
       </el-form-item>
       <el-checkbox v-model="checked" class="loginRemember">记住我</el-checkbox>
       <el-button type="primary" style="width: 100%" @click="submitLogin">登录</el-button>
@@ -24,7 +24,7 @@
     name: "Login.vue",
     data() {
       return {
-        captchaUrl: '',
+        captchaUrl: '/captcha?time=' + new Date(),
         loginForm: {
           username: 'admin',
           password: '123',
@@ -39,6 +39,11 @@
       }
     },
     methods: {
+      // 点击验证码触发的事件
+      updateCaptcha(){
+        this.captchaUrl= '/captcha?time=' + new Date()
+      },
+      // 点击登录触发的事件
       submitLogin(){
         this.$refs.loginForm.validate((validate) => {
           if(validate){
