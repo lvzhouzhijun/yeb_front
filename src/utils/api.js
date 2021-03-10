@@ -1,7 +1,16 @@
 import axios from 'axios'
 import {Message} from 'element-ui'
 import router from '../router'
-
+// 请求拦截器
+axios.interceptors.request.use(config => {
+  // 如果存在 session ，请求携带 token
+  if (window.sessionStorage.getItem('tokenStr')) {
+    config.headers['Authorization'] = window.sessionStorage.getItem('tokenStr')
+  }
+  return config
+},error => {
+  console.log(error)
+})
 // 响应拦截器
 // success：表示成功调到后端接口
 // error：调用后端接口失败
@@ -44,6 +53,33 @@ export const postRequest = (url,params) => {
   return axios({
     method: 'post',
     url: `${base}${url}`,
+    data: params
+  })
+}
+
+// 传送 JSON 的 put 请求
+export const putRequest = (url,params) => {
+  return axios({
+    method: 'put',
+    url: `${base}{url}`,
+    data: params
+  })
+}
+
+// get 请求
+export const getRequest = (url,params) => {
+  return axios({
+    method: 'get',
+    url: `${base}{url}`,
+    data: params
+  })
+}
+
+// delete 请求
+export const deleteRequest = (url,params) => {
+  return axios({
+    method: 'delete',
+    url: `${base}{url}`,
     data: params
   })
 }

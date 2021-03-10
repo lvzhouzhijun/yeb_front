@@ -1,6 +1,10 @@
 <template>
   <div>
-    <el-form :rules="rules" ref="loginForm" :model="loginForm" class="loginContainer">
+    <el-form :rules="rules" ref="loginForm" :model="loginForm" class="loginContainer"
+        element-loading-text="正在登陆中......."
+        element-loading-spinner="el-icon-loading"
+        element-loading-background="rgba(0,0,0,0.8)"
+      >
       <h3 class="loginTitle">yeb登录</h3>
       <el-form-item prop="username">
         <el-input type="text" v-model="loginForm.username" placeholder="请输入用户名"/>
@@ -20,6 +24,8 @@
 </template>
 
 <script>
+
+
   export default {
     name: "Login.vue",
     data() {
@@ -27,9 +33,10 @@
         captchaUrl: '/captcha?time=' + new Date(),
         loginForm: {
           username: 'admin',
-          password: '123',
+          password: 'abc',
           code: ''
         },
+        loading: false,
         checked: true,
         rules: {
           username: [{required:true,message:'请输入用户名',trigger:'blur'}],
@@ -46,8 +53,20 @@
       // 点击登录触发的事件
       submitLogin(){
         this.$refs.loginForm.validate((validate) => {
+          // 登录前的校验
           if(validate){
-            alert(1)
+            this.loading = true
+            this.postRequest('/login',this.loginForm).then(resp => {
+              if(resp){
+                this.loading = false
+                // 获取请求中的 token
+                const tokeStr = resp.obj.tokenHead + resp.obj.token
+                // 存储 token
+                window.sessionStorage.setItem("tokenStr",tokeStr)
+                // 跳转页面
+                this.$router.replace('/home')
+              }
+            })
           }else{
             this.$message.error('请输入所有的表单');
             return false
@@ -76,5 +95,9 @@
   .loginRemember{
     text-align: left;
     margin: 0px 0px 15px 0px;
+  }
+  .el-form-item__content{
+    display: flex;
+    align-items: center;
   }
 </style>
