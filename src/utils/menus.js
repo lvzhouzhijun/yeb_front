@@ -37,7 +37,17 @@ export const formRouters = (routes => {
       iconCls: iconCls,
       children: children,
       component(resolve) {
-        require(['../views/'+component + '.vue'], resolve)
+        if(component.startWith('Emp')){
+          require(['../views/emp/'+component + '.vue'], resolve)
+        } else if (component.startWith('per')){
+          require(['../views/per/'+component + '.vue'], resolve)
+        } else if (component.startWith('sal')){
+          require(['../views/sal/'+component + '.vue'], resolve)
+        } else if (component.startWith('sta')){
+          require(['../views/sta/'+component + '.vue'], resolve)
+        } else if (component.startWith('sys')){
+          require(['../views/sys/'+component + '.vue'], resolve)
+        }
       }
     }
     fmtRoutes.push(fmRoutes)
